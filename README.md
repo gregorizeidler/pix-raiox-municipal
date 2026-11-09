@@ -5,7 +5,7 @@ brasileiro *deveria* receber por habitante — dado o tamanho da população e a
 local — e sinaliza quem está muito acima ou muito abaixo disso.
 
 **Site:** gregorizeidler.github.io/pix-raiox-municipal
-**Fontes (todas abertas):** BCB (transações Pix por município), IBGE/SIDRA (população e PIB municipal), IBGE (malha municipal).
+**Fontes (todas abertas):** BCB (transações Pix por município), IBGE/SIDRA (população e PIB municipal), IBGE (malha municipal e municípios da faixa de fronteira).
 
 ## O que o projeto responde
 
@@ -45,7 +45,9 @@ dependência-zero: biblioteca padrão do Python 3.
 
 ## Achados que o modelo já produziu
 
-- **Fronteira e comércio:** Pacaraima (RR) recebe R$ 31.015 por habitante em Pix PF —
+- **Fronteira e comércio:** cruzando com a lista oficial de municípios da faixa de
+  fronteira do IBGE (590 municípios, 2024), 8 dos 46 sinalizados estão na faixa.
+  Pacaraima (RR) recebe R$ 31.015 por habitante em Pix PF —
   12,5× o esperado (z = 11,9), o maior resíduo do país. A lista dos 46 sinalizados concentra
   municípios pequenos de fronteira, garimpo e rota comercial.
 - **Agro:** Mato Grosso lidera o Pix PF por habitante entre UFs (R$ 7.952), e os maiores

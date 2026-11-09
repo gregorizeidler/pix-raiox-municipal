@@ -148,6 +148,9 @@ def main():
     meses = completos[-MESES_MODELO:]
     print('meses usados no modelo: %s a %s (%d)' % (meses[0], meses[-1], len(meses)))
 
+    caminho_fronteira = os.path.join(DATA, 'fronteira.json')
+    fronteira = set(json.load(open(caminho_fronteira))['codigos']) if os.path.exists(caminho_fronteira) else set()
+
     pop = {int(k): v for k, v in json.load(open(os.path.join(DATA, 'populacao.json')))['valores'].items()}
     pib = {int(k): v for k, v in json.load(open(os.path.join(DATA, 'pib.json')))['valores'].items()}
     pib_pc = {k: (v * 1000.0 / pop[k]) for k, v in pib.items() if pop.get(k)}
@@ -227,6 +230,7 @@ def main():
             'pjpc': round(r['pj']['por_hab_medio'], 2),
             'tk': round(ticket, 2),
             'pes': round(m['pes_rec_pf']),
+            'fr': 1 if cod in fronteira else 0,
             'serie': serie_pf,
         })
     municipios.sort(key=lambda d: -d['z'])

@@ -19,7 +19,8 @@
       return;
     }
     document.title = m.n + ' (' + m.u + ') — Raio-X do Pix municipal';
-    document.getElementById('titulo').textContent = m.n + ' · ' + m.u;
+    document.getElementById('titulo').textContent = m.n + ' · ' + m.u +
+      (m.fr ? ' · faixa de fronteira' : '');
     document.getElementById('subtitulo').textContent =
       fmt(m.p) + ' habitantes · PIB por habitante de ' + brl(m.pibpc) +
       ' · Pix de pessoa física no município: ' + brl(m.recebepc) + ' por habitante.';

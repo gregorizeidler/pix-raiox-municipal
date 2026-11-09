@@ -28,6 +28,9 @@ SIDRA = 'https://apisidra.ibge.gov.br/values'
 MALHA = ('https://servicodados.ibge.gov.br/api/v3/malhas/paises/BR'
          '?formato=application/vnd.geo+json&qualidade=minima&intrarregiao=municipio')
 
+FAIXA = ('https://geoftp.ibge.gov.br/organizacao_do_territorio/estrutura_territorial/'
+         'municipios_da_faixa_de_fronteira/2024/Mun_Faixa_de_Fronteira_Cidades_Gemeas_2024.ods')
+
 CAMPOS = ['anomes', 'municipio_ibge', 'municipio', 'uf', 'uf_sigla', 'regiao',
           'vl_pag_pf', 'qt_pag_pf', 'vl_pag_pj', 'qt_pag_pj',
           'vl_rec_pf', 'qt_rec_pf', 'vl_rec_pj', 'qt_rec_pj',
@@ -150,6 +153,22 @@ def coleta_ibge():
     print('populacao: %d municipios | PIB: %d municipios' % (len(pop), len(pib)), flush=True)
 
 
+def coleta_fronteira():
+    """Municipios da faixa de fronteira (IBGE, 2024) a partir do ODS oficial."""
+    import io
+    import re
+    import zipfile
+    bruto = http_get(FAIXA, timeout=300)
+    if bruto[:2] != b'PK':  # ODS e um zip
+        raise RuntimeError('ODS da faixa de fronteira veio em formato inesperado')
+    xml = zipfile.ZipFile(io.BytesIO(bruto)).read('content.xml').decode('utf-8')
+    codigos = sorted({int(c) for c in re.findall(r'<text:p[^>]*>(\d{7})</text:p>', xml)})
+    with open(os.path.join(DATA, 'fronteira.json'), 'w', encoding='utf-8') as fh:
+        json.dump({'fonte': 'IBGE, municipios da faixa de fronteira (2024)',
+                   'codigos': codigos}, fh)
+    print('faixa de fronteira: %d municipios' % len(codigos), flush=True)
+
+
 def coleta_malha():
     bruto = http_get(MALHA, timeout=300)
     if bruto[:2] == b'\x1f\x8b':  # o servidor devolve gzip mesmo sem Accept-Encoding
@@ -162,8 +181,9 @@ def coleta_malha():
 
 if __name__ == '__main__':
     os.makedirs(DATA, exist_ok=True)
-    etapas = {'pix': coleta_pix, 'ibge': coleta_ibge, 'malha': coleta_malha}
-    alvo = sys.argv[1:] or ['pix', 'ibge', 'malha']
+    etapas = {'pix': coleta_pix, 'ibge': coleta_ibge, 'malha': coleta_malha,
+               'fronteira': coleta_fronteira}
+    alvo = sys.argv[1:] or ['pix', 'ibge', 'malha', 'fronteira']
     for nome in alvo:
         print('== %s ==' % nome, flush=True)
         etapas[nome]()

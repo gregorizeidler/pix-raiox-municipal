@@ -40,11 +40,14 @@ def linhas_tabela(itens, tipo='alta'):
     for i, m in enumerate(itens, 1):
         tag = ('<span class="tag">%s</span>' % ('z %+.1f' % m['z'])) if tipo == 'alta' else (
             '<span class="tag baixo">z %+.1f</span>' % m['z'])
+        nome = ('<a href="municipio.html?id=%d">%s</a> <span class="tag baixo">fronteira</span>'
+                % (m['i'], m['n'])) if m.get('fr') else (
+               '<a href="municipio.html?id=%d">%s</a>' % (m['i'], m['n']))
         out.append(
-            '<tr><td class="num">%d</td><td><a href="municipio.html?id=%d">%s</a></td>'
+            '<tr><td class="num">%d</td><td>%s</td>'
             '<td>%s</td><td class="num">%s</td><td class="num">%s</td><td class="num">%s</td>'
             '<td class="num">%s</td><td class="num">%s</td></tr>'
-            % (i, m['i'], m['n'], m['u'], num(m['p']), brl(m['recebepc']), brl(m['exppc']),
+            % (i, nome, m['u'], num(m['p']), brl(m['recebepc']), brl(m['exppc']),
                pct(m['dev']), tag))
     return ''.join(out)
 
@@ -101,7 +104,7 @@ def main():
     enxuto = [{'i': m['i'], 'n': m['n'], 'u': m['u'], 'p': m['p'], 'pibpc': m['pibpc'],
                'recebepc': m['recebepc'], 'exppc': m['exppc'], 'z': m['z'], 'dev': m['dev'],
                'exc': m['exc'], 'zj': m['zj'], 'pjpc': m['pjpc'], 'tk': m['tk'],
-               'serie': m['serie']} for m in ms]
+               'fr': m.get('fr', 0), 'serie': m['serie']} for m in ms]
     with open(os.path.join(DOCS, 'dados', 'municipios.json'), 'w', encoding='utf-8') as fh:
         json.dump(enxuto, fh, ensure_ascii=False, separators=(',', ':'))
     with open(os.path.join(DOCS, 'dados', 'resumo.json'), 'w', encoding='utf-8') as fh:
@@ -112,16 +115,18 @@ def main():
     # CSV para download (planilha de bolso)
     with open(os.path.join(DOCS, 'dados', 'municipios.csv'), 'w', encoding='utf-8') as fh:
         fh.write('ibge;municipio;uf;populacao;pib_por_hab;pix_recebido_pf_pc;esperado_pc;'
-                 'desvio_pct;z;excesso_12m;ticket_pf;pj_pc;z_pj\n')
+                 'desvio_pct;z;excesso_12m;ticket_pf;pj_pc;z_pj;fronteira\n')
         for m in ms:
-            fh.write('%d;%s;%s;%d;%d;%.2f;%.2f;%.1f;%.2f;%d;%.2f;%.2f;%.2f\n'
+            fh.write('%d;%s;%s;%d;%d;%.2f;%.2f;%.1f;%.2f;%d;%.2f;%.2f;%.2f;%d\n'
                      % (m['i'], m['n'], m['u'], m['p'], m['pibpc'], m['recebepc'], m['exppc'],
-                        m['dev'], m['z'], m['exc'], m['tk'], m['pjpc'], m['zj']))
+                        m['dev'], m['z'], m['exc'], m['tk'], m['pjpc'], m['zj'], m.get('fr', 0)))
     open(os.path.join(DOCS, '.nojekyll'), 'w').close()
 
     # ---- index ----
     html = open(os.path.join(ROOT, 'src', 'index.tpl.html'), encoding='utf-8').read()
+    acima_lista = [m for m in ms if m['z'] >= 3]
     trocas = {
+        '{{FR_ACIMA}}': str(sum(1 for m in acima_lista if m.get('fr'))),
         '{{MES}}': '%d/%d' % (meta['ultimo_mes'] % 100, meta['ultimo_mes'] // 100),
         '{{VOLUME}}': brl(nac['concentracao']['total_ultimo_mes'] / 1e12, 2) + ' tri',
         '{{TOP1}}': pct(nac['concentracao']['top1_pct'], 1),
