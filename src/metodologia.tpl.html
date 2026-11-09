@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Metodologia — Raio-X do Pix municipal</title>
+<link rel="stylesheet" href="assets/estilo.css">
+</head>
+<body>
+<header class="topo">
+  <div class="wrap">
+    <span class="selo">metodologia e limites</span>
+    <h1>Como o modelo foi construído</h1>
+    <p>Regressão robusta em log, 12 meses de dados, {{N_MUN}} municípios. O que entra,
+       o que fica de fora e onde o resultado engana.</p>
+    <nav class="nav"><a href="index.html">← Voltar ao raio-X</a></nav>
+  </div>
+</header>
+
+<main class="wrap metodologia">
+  <section>
+    <h2>1. A pergunta</h2>
+    <p>Quanto Pix um município deveria movimentar, dado o seu tamanho e a sua renda? A diferença
+      entre o previsto e o observado é o que chamamos aqui de anomalia. A pergunta não é “quem
+      movimenta mais” — São Paulo sempre vai liderar — e sim “quem movimenta mais do que o seu
+      tamanho permite explicar”.</p>
+  </section>
+
+  <section>
+    <h2>2. Os dados</h2>
+    <ul>
+      <li><strong>Pix por município:</strong> API de Dados Abertos do BCB, recurso
+        <code>TransacoesPixPorMunicipio</code>. Traz, por mês e por município, valor e quantidade
+        de transações liquidadas com pagador e recebedor pessoa física e jurídica, além do número
+        de pessoas distintas. Coletamos de nov/2020 até o mês corrente: 406.518 linhas.</li>
+      <li><strong>População:</strong> IBGE/SIDRA, tabela 6579, variável 9324 (estimativa mais recente).</li>
+      <li><strong>PIB municipal:</strong> IBGE/SIDRA, tabela 5938, variável 37 (PIB a preços
+        correntes, em mil reais, ano mais recente disponível — 2023).</li>
+      <li><strong>Malha municipal:</strong> API de malhas do IBGE, GeoJSON de qualidade mínima,
+        simplificado aqui por Douglas-Peucker para caber num SVG leve.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>3. O modelo</h2>
+    <p>Para cada município <code>i</code> e mês <code>t</code>, estimamos:</p>
+    <p><code>log(PixPF<sub>it</sub> / pop<sub>i</sub>) = α + β·log(pop<sub>i</sub>) +
+      γ·log(PIBpc<sub>i</sub>) + δ<sub>UF</sub> + θ<sub>t</sub> + ε<sub>it</sub></code></p>
+    <ul>
+      <li><strong>PixPF / pop:</strong> valor recebido por pessoa física por habitante — a variável
+        que melhor reflete o dinheiro que chega às pessoas, e não o endereço fiscal das empresas.</li>
+      <li><strong>log(pop):</strong> captura economias de escala e aglomeração.</li>
+      <li><strong>log(PIB por habitante):</strong> captura renda; sem ela, o modelo confundiria
+        município rico com município anômalo.</li>
+      <li><strong>Efeito fixo de UF:</strong> controla diferenças estaduais de bancarização,
+        tributação e costume de pagamento.</li>
+      <li><strong>Efeito fixo de mês:</strong> controla sazonalidade (13º, safra, festas).</li>
+    </ul>
+    <p>O ajuste é <strong>robusto por IRLS com peso de Huber</strong> (corte em 1,345 desvios):
+      sem isso, os próprios outliers puxariam a reta e desapareceriam do resultado. A escala do
+      resíduo é estimada por <code>1,4826 × MAD</code>, que não pressupõe normalidade, e o
+      <strong>z</strong> é o resíduo mediano do município nos 12 meses dividido por essa escala.</p>
+    <p>Usamos 12 meses (nov/2025 a out/2026) para reduzir ruído de um mês atípico. Municípios com
+      população ou PIB ausente, ou sem valor no mês, ficam de fora — o modelo roda com 66.840
+      observações município-mês.</p>
+  </section>
+
+  <section>
+    <h2>4. Onde o resultado engana</h2>
+    <ul>
+      <li><strong>Município-sede:</strong> Pix de pessoa jurídica é recebido onde a empresa está
+        registrada. Um município de 6 mil habitantes pode abrigar a tesouraria de uma rede inteira.
+        Por isso o modelo principal usa pessoa física; a métrica de PJ aparece como indicador separado.</li>
+      <li><strong>PIB defasado:</strong> o dado municipal mais recente é de 2023. Municípios que
+        mudaram muito em dois ou três anos (fronteira, agro, mineração) aparecem como anomalia.</li>
+      <li><strong>Municípios pequenos:</strong> variância alta. Parte dos 46 sinalizados tem menos
+        de 10 mil habitantes, onde um fluxo sazonal desloca a média.</li>
+      <li><strong>Pix não é renda:</strong> a mesma pessoa pode receber e repassar o mesmo dinheiro
+        várias vezes no mês. O dado mede fluxo, não riqueza.</li>
+      <li><strong>Anomalia não é irregularidade:</strong> o projeto aponta onde olhar. Nenhum nome
+        aqui é acusação, e a confirmação exige investigação com dado que este projeto não tem.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>5. Como reproduzir</h2>
+    <pre style="background:#0e1518;color:#d8f3ef;padding:16px;border-radius:12px;overflow-x:auto;font-size:13.5px"><code>git clone https://github.com/gregorizeidler/pix-raiox-municipal
+cd pix-raiox-municipal
+bash setup.sh
+python3 run.py        # coleta, modelo, analise, mapa e site</code></pre>
+    <p>Sem dependência externa: só a biblioteca padrão do Python 3.11. O código está em
+      <code>src/</code> e os testes em <code>tests/</code> (<code>python3 -m unittest discover tests</code>).</p>
+  </section>
+</main>
+<footer><div class="wrap">Projeto de dados abertos · Pix por município · atualizado em {{MES}}</div></footer>
+</body>
+</html>

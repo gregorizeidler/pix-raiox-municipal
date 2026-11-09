@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Raio-X do Pix municipal — onde o dinheiro passa fora da curva</title>
+<meta name="description" content="Modelo que compara o Pix recebido por habitante com o esperado para população e renda de cada um dos 5.571 municípios brasileiros. Dados abertos do BCB e do IBGE.">
+<link rel="stylesheet" href="assets/estilo.css">
+</head>
+<body>
+<header class="topo">
+  <div class="wrap">
+    <span class="selo">dados abertos · BCB + IBGE</span>
+    <h1>Raio-X do Pix municipal</h1>
+    <p>O Pix recebido por habitante, comparado com o que o tamanho e a renda de cada município
+       explicam. Sobram 46 municípios muito acima do esperado e 30 muito abaixo —
+       e os dois lados contam histórias diferentes.</p>
+    <nav class="nav">
+      <a href="metodologia.html">Metodologia</a>
+      <a href="#mapa">Mapa</a>
+      <a href="#ranking">Ranking</a>
+      <a href="#agro">Pix do agro</a>
+      <a href="#sede">Municípios-sede</a>
+      <a href="dados/municipios.csv">Baixar dados</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section>
+    <div class="cartoes">
+      <div class="cartao">
+        <div class="rotulo">Pix recebido em 10/2026</div>
+        <div class="valor">R$ 3,27 tri</div>
+        <div class="nota">somando pessoa física e jurídica, em 5.570 municípios</div>
+      </div>
+      <div class="cartao">
+        <div class="rotulo">Concentração</div>
+        <div class="valor">59,4%</div>
+        <div class="nota">do valor ficou com os 56 municípios do top 1%</div>
+      </div>
+      <div class="cartao">
+        <div class="rotulo">Fora da curva</div>
+        <div class="valor">46</div>
+        <div class="nota">municípios com z ≥ 3 (30 no outro extremo)</div>
+      </div>
+      <div class="cartao">
+        <div class="rotulo">Excesso em 12 meses</div>
+        <div class="valor">R$ 67,6 bi</div>
+        <div class="nota">acima do esperado, somando só os municípios sinalizados</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="mapa">
+    <h2>O mapa da anomalia</h2>
+    <p class="sub">Cada município é pintado pelo resíduo do modelo: o quanto o Pix recebido por
+      habitante ficou acima (laranja) ou abaixo (azul) do esperado para a sua população e a sua renda.
+      Passe o dedo ou o mouse para ver o valor; clique para abrir a ficha.</p>
+    <div class="painel">
+      <div id="mapa-alvo" aria-live="polite"><p style="color:#71797f">Carregando o mapa…</p></div>
+      <div class="legenda">
+        <span><i class="z4"></i>muito acima (z ≥ 4,5)</span>
+        <span><i class="z3"></i>acima (3 a 4,5)</span>
+        <span><i class="z2"></i>levemente acima</span>
+        <span><i class="z0"></i>dentro do esperado</span>
+        <span><i class="zm2"></i>levemente abaixo</span>
+        <span><i class="zm3"></i>muito abaixo (z ≤ −3)</span>
+      </div>
+    </div>
+    <div class="busca">
+      <input id="busca" list="lista-municipios" placeholder="Buscar município (ex.: Pacaraima)" autocomplete="off">
+      <datalist id="lista-municipios"></datalist>
+      <button id="ir">Abrir ficha</button>
+    </div>
+  </section>
+
+  <section id="ranking">
+    <h2>Quem recebe muito mais Pix do que deveria</h2>
+    <p class="sub">Os 25 municípios com maior resíduo. O “esperado” vem do modelo: população, PIB
+      por habitante, UF e mês. O desvio é a diferença entre o que entrou e o que o modelo previa,
+      em média nos últimos 12 meses.</p>
+    <div class="painel rolagem">
+      <table class="tabela">
+        <thead><tr><th>#</th><th>Município</th><th>UF</th><th class="num">População</th>
+          <th class="num">Pix PF/hab</th><th class="num">Esperado</th><th class="num">Desvio</th>
+          <th class="num">z</th></tr></thead>
+        <tbody><tr><td class="num">1</td><td><a href="municipio.html?id=1400456">Pacaraima</a></td><td>14</td><td class="num">24.132</td><td class="num">R$ 31.015</td><td class="num">R$ 2.473</td><td class="num">1.154,2%</td><td class="num"><span class="tag">z +11.9</span></td></tr><tr><td class="num">2</td><td><a href="municipio.html?id=3111408">Campo Florido</a></td><td>31</td><td class="num">9.019</td><td class="num">R$ 16.368</td><td class="num">R$ 4.246</td><td class="num">285,5%</td><td class="num"><span class="tag">z +6.4</span></td></tr><tr><td class="num">3</td><td><a href="municipio.html?id=3163003">São José Da Safira</a></td><td>31</td><td class="num">3.837</td><td class="num">R$ 10.019</td><td class="num">R$ 2.990</td><td class="num">235,1%</td><td class="num"><span class="tag">z +5.7</span></td></tr><tr><td class="num">4</td><td><a href="municipio.html?id=2605459">Fernando De Noronha</a></td><td>26</td><td class="num">3.364</td><td class="num">R$ 10.435</td><td class="num">R$ 3.217</td><td class="num">224,4%</td><td class="num"><span class="tag">z +5.5</span></td></tr><tr><td class="num">5</td><td><a href="municipio.html?id=2507408">Jericó</a></td><td>25</td><td class="num">7.734</td><td class="num">R$ 8.438</td><td class="num">R$ 2.731</td><td class="num">209,0%</td><td class="num"><span class="tag">z +5.3</span></td></tr><tr><td class="num">6</td><td><a href="municipio.html?id=2509370">Mato Grosso</a></td><td>25</td><td class="num">2.577</td><td class="num">R$ 6.716</td><td class="num">R$ 2.480</td><td class="num">170,8%</td><td class="num"><span class="tag">z +4.7</span></td></tr><tr><td class="num">7</td><td><a href="municipio.html?id=3120706">Cruzeiro Da Fortaleza</a></td><td>31</td><td class="num">3.623</td><td class="num">R$ 9.368</td><td class="num">R$ 3.477</td><td class="num">169,4%</td><td class="num"><span class="tag">z +4.7</span></td></tr><tr><td class="num">8</td><td><a href="municipio.html?id=4200556">Águas Frias</a></td><td>42</td><td class="num">3.036</td><td class="num">R$ 10.770</td><td class="num">R$ 4.214</td><td class="num">155,6%</td><td class="num"><span class="tag">z +4.4</span></td></tr><tr><td class="num">9</td><td><a href="municipio.html?id=4315909">Rodeio Bonito</a></td><td>43</td><td class="num">6.831</td><td class="num">R$ 7.035</td><td class="num">R$ 2.812</td><td class="num">150,2%</td><td class="num"><span class="tag">z +4.3</span></td></tr><tr><td class="num">10</td><td><a href="municipio.html?id=1505031">Novo Progresso</a></td><td>15</td><td class="num">37.570</td><td class="num">R$ 9.193</td><td class="num">R$ 3.695</td><td class="num">148,8%</td><td class="num"><span class="tag">z +4.3</span></td></tr><tr><td class="num">11</td><td><a href="municipio.html?id=3165578">Senador Amaral</a></td><td>31</td><td class="num">6.572</td><td class="num">R$ 7.289</td><td class="num">R$ 3.004</td><td class="num">142,7%</td><td class="num"><span class="tag">z +4.2</span></td></tr><tr><td class="num">12</td><td><a href="municipio.html?id=2919553">Luís Eduardo Magalhães</a></td><td>29</td><td class="num">119.947</td><td class="num">R$ 12.089</td><td class="num">R$ 5.118</td><td class="num">136,2%</td><td class="num"><span class="tag">z +4.0</span></td></tr><tr><td class="num">13</td><td><a href="municipio.html?id=3161601">São Geraldo Da Piedade</a></td><td>31</td><td class="num">3.145</td><td class="num">R$ 6.391</td><td class="num">R$ 2.779</td><td class="num">129,9%</td><td class="num"><span class="tag">z +3.9</span></td></tr><tr><td class="num">14</td><td><a href="municipio.html?id=4323804">Xangri-Lá</a></td><td>43</td><td class="num">16.949</td><td class="num">R$ 7.613</td><td class="num">R$ 3.313</td><td class="num">129,8%</td><td class="num"><span class="tag">z +3.9</span></td></tr><tr><td class="num">15</td><td><a href="municipio.html?id=2505501">Vista Serrana</a></td><td>25</td><td class="num">3.784</td><td class="num">R$ 5.677</td><td class="num">R$ 2.481</td><td class="num">128,8%</td><td class="num"><span class="tag">z +3.9</span></td></tr><tr><td class="num">16</td><td><a href="municipio.html?id=1500131">Abel Figueiredo</a></td><td>15</td><td class="num">6.250</td><td class="num">R$ 6.427</td><td class="num">R$ 2.821</td><td class="num">127,8%</td><td class="num"><span class="tag">z +3.9</span></td></tr><tr><td class="num">17</td><td><a href="municipio.html?id=3500600">Águas De São Pedro</a></td><td>35</td><td class="num">2.933</td><td class="num">R$ 8.445</td><td class="num">R$ 3.861</td><td class="num">118,7%</td><td class="num"><span class="tag">z +3.7</span></td></tr><tr><td class="num">18</td><td><a href="municipio.html?id=4316204">Rondinha</a></td><td>43</td><td class="num">5.078</td><td class="num">R$ 5.992</td><td class="num">R$ 2.752</td><td class="num">117,7%</td><td class="num"><span class="tag">z +3.7</span></td></tr><tr><td class="num">19</td><td><a href="municipio.html?id=3144805">Nova Lima</a></td><td>31</td><td class="num">122.683</td><td class="num">R$ 12.119</td><td class="num">R$ 5.570</td><td class="num">117,6%</td><td class="num"><span class="tag">z +3.7</span></td></tr><tr><td class="num">20</td><td><a href="municipio.html?id=5209804">Hidrolina</a></td><td>52</td><td class="num">3.441</td><td class="num">R$ 9.481</td><td class="num">R$ 4.376</td><td class="num">116,7%</td><td class="num"><span class="tag">z +3.6</span></td></tr><tr><td class="num">21</td><td><a href="municipio.html?id=3149200">Pedrinópolis</a></td><td>31</td><td class="num">3.392</td><td class="num">R$ 8.118</td><td class="num">R$ 3.840</td><td class="num">111,4%</td><td class="num"><span class="tag">z +3.5</span></td></tr><tr><td class="num">22</td><td><a href="municipio.html?id=4202008">Balneário Camboriú</a></td><td>42</td><td class="num">154.525</td><td class="num">R$ 9.797</td><td class="num">R$ 4.633</td><td class="num">111,4%</td><td class="num"><span class="tag">z +3.5</span></td></tr><tr><td class="num">23</td><td><a href="municipio.html?id=3162104">São Gotardo</a></td><td>31</td><td class="num">44.364</td><td class="num">R$ 8.792</td><td class="num">R$ 4.173</td><td class="num">110,7%</td><td class="num"><span class="tag">z +3.5</span></td></tr><tr><td class="num">24</td><td><a href="municipio.html?id=3549003">São Francisco</a></td><td>35</td><td class="num">2.617</td><td class="num">R$ 6.710</td><td class="num">R$ 3.189</td><td class="num">110,4%</td><td class="num"><span class="tag">z +3.5</span></td></tr><tr><td class="num">25</td><td><a href="municipio.html?id=5103056">Cláudia</a></td><td>51</td><td class="num">9.168</td><td class="num">R$ 13.951</td><td class="num">R$ 6.698</td><td class="num">108,3%</td><td class="num"><span class="tag">z +3.5</span></td></tr></tbody>
+      </table>
+    </div>
+    <p class="rodape-tabela">Pix PF por habitante = valor recebido por pessoa física dividido pela
+      população, média de 12 meses. A mediana nacional é R$ 3.441 por habitante.</p>
+  </section>
+
+  <section>
+    <h2>O caso que puxa o mapa: Pacaraima, 14</h2>
+    <div class="grade2">
+      <div class="painel">
+        <p class="sub" style="margin-top:0">Com 24.132 habitantes, o município recebe
+          <strong>R$ 31.015</strong> por habitante em Pix de pessoa física. O modelo esperava
+          <strong>R$ 2.473</strong> — 12,5x mais.</p>
+        <p class="sub">É o maior resíduo do país e não é um caso isolado de município grande:
+          a lista é dominada por cidades pequenas, muitas em faixa de fronteira, garimpo ou
+          rota de comércio internacional. O dado mostra o fluxo; a causa exige campo.</p>
+        <p><a href="municipio.html?id=1400456">Abrir a ficha de Pacaraima →</a></p>
+      </div>
+      <div class="painel">
+        <h3 style="margin-top:0">Como ler o z</h3>
+        <p class="sub">O z mede quantos desvios robustos o município está acima do previsto.
+          Em uma distribuição normal, z = 3 já seria raro; aqui 46 municípios passam disso,
+          o que é esperado num fenômeno com cauda longa como o Pix.</p>
+        <p class="sub">z entre −1,5 e 1,5 concentra a maior parte das cidades: é ali que o modelo
+          funciona como régua, não como alerta.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>O outro lado: quem movimenta menos do que deveria</h2>
+    <p class="sub">Municípios com z ≤ −3. Aqui o padrão é outro: cidades pequenas do Norte e do
+      Nordeste, muitas em área indígena ou de difícil acesso bancário. Pix baixo por habitante não
+      é fraude — costuma ser ausência de infraestrutura financeira e de renda monetizada.</p>
+    <div class="painel rolagem">
+      <table class="tabela">
+        <thead><tr><th>#</th><th>Município</th><th>UF</th><th class="num">População</th>
+          <th class="num">Pix PF/hab</th><th class="num">Esperado</th><th class="num">Desvio</th>
+          <th class="num">z</th></tr></thead>
+        <tbody><tr><td class="num">1</td><td><a href="municipio.html?id=2405306">Januário Cicco</a></td><td>24</td><td class="num">8.848</td><td class="num">R$ 475</td><td class="num">R$ 2.953</td><td class="num">-83,9%</td><td class="num"><span class="tag baixo">z -8.6</span></td></tr><tr><td class="num">2</td><td><a href="municipio.html?id=1400704">Uiramutã</a></td><td>14</td><td class="num">16.809</td><td class="num">R$ 643</td><td class="num">R$ 2.237</td><td class="num">-71,2%</td><td class="num"><span class="tag baixo">z -5.9</span></td></tr><tr><td class="num">3</td><td><a href="municipio.html?id=1504752">Mojuí Dos Campos</a></td><td>15</td><td class="num">26.305</td><td class="num">R$ 1.135</td><td class="num">R$ 3.288</td><td class="num">-65,5%</td><td class="num"><span class="tag baixo">z -5.0</span></td></tr><tr><td class="num">4</td><td><a href="municipio.html?id=2401305">Campo Grande</a></td><td>24</td><td class="num">10.094</td><td class="num">R$ 1.053</td><td class="num">R$ 2.900</td><td class="num">-63,7%</td><td class="num"><span class="tag baixo">z -4.8</span></td></tr><tr><td class="num">5</td><td><a href="municipio.html?id=2106631">Matões Do Norte</a></td><td>21</td><td class="num">18.087</td><td class="num">R$ 1.095</td><td class="num">R$ 2.742</td><td class="num">-60,1%</td><td class="num"><span class="tag baixo">z -4.3</span></td></tr><tr><td class="num">6</td><td><a href="municipio.html?id=4305835">Coqueiro Baixo</a></td><td>43</td><td class="num">1.308</td><td class="num">R$ 1.021</td><td class="num">R$ 2.529</td><td class="num">-59,6%</td><td class="num"><span class="tag baixo">z -4.3</span></td></tr><tr><td class="num">7</td><td><a href="municipio.html?id=4304614">Canudos Do Vale</a></td><td>43</td><td class="num">1.686</td><td class="num">R$ 1.075</td><td class="num">R$ 2.569</td><td class="num">-58,2%</td><td class="num"><span class="tag baixo">z -4.1</span></td></tr><tr><td class="num">8</td><td><a href="municipio.html?id=2609154">Manari</a></td><td>26</td><td class="num">25.990</td><td class="num">R$ 1.117</td><td class="num">R$ 2.578</td><td class="num">-56,7%</td><td class="num"><span class="tag baixo">z -3.9</span></td></tr><tr><td class="num">9</td><td><a href="municipio.html?id=2206720">Nazária</a></td><td>22</td><td class="num">11.174</td><td class="num">R$ 1.178</td><td class="num">R$ 2.588</td><td class="num">-54,5%</td><td class="num"><span class="tag baixo">z -3.7</span></td></tr><tr><td class="num">10</td><td><a href="municipio.html?id=5108105">Tesouro</a></td><td>51</td><td class="num">2.893</td><td class="num">R$ 2.730</td><td class="num">R$ 5.839</td><td class="num">-53,2%</td><td class="num"><span class="tag baixo">z -3.6</span></td></tr><tr><td class="num">11</td><td><a href="municipio.html?id=5103908">General Carneiro</a></td><td>51</td><td class="num">5.913</td><td class="num">R$ 2.787</td><td class="num">R$ 5.897</td><td class="num">-52,7%</td><td class="num"><span class="tag baixo">z -3.5</span></td></tr><tr><td class="num">12</td><td><a href="municipio.html?id=2200954">Aroeiras Do Itaim</a></td><td>22</td><td class="num">2.787</td><td class="num">R$ 1.088</td><td class="num">R$ 2.294</td><td class="num">-52,6%</td><td class="num"><span class="tag baixo">z -3.5</span></td></tr></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="agro">
+    <h2>O Pix do agro tem ticket de outro tamanho</h2>
+    <p class="sub">Mato Grosso lidera o Pix recebido por pessoa física por habitante
+      (R$ 7.952), à frente de São Paulo (R$ 6.411). E os maiores tickets médios do país estão
+      exatamente nos municípios de soja e algodão: pagamento de safra, arrendamento e
+      compra de insumo passam pelo Pix com valor médio acima de R$ 800.</p>
+    <div class="painel rolagem">
+      <table class="tabela">
+        <thead><tr><th>Município</th><th>UF</th><th class="num">População</th>
+          <th class="num">Ticket médio PF</th></tr></thead>
+        <tbody><tr><td><a href="municipio.html?id=5105259">Lucas Do Rio Verde</a></td><td>51</td><td class="num">99.291</td><td class="num">R$ 1.251,97</td></tr><tr><td><a href="municipio.html?id=5107925">Sorriso</a></td><td>51</td><td class="num">128.727</td><td class="num">R$ 1.123,86</td></tr><tr><td><a href="municipio.html?id=3144805">Nova Lima</a></td><td>31</td><td class="num">122.683</td><td class="num">R$ 975,23</td></tr><tr><td><a href="municipio.html?id=5102637">Campo Novo Do Parecis</a></td><td>51</td><td class="num">53.393</td><td class="num">R$ 969,58</td></tr><tr><td><a href="municipio.html?id=2919553">Luís Eduardo Magalhães</a></td><td>29</td><td class="num">119.947</td><td class="num">R$ 884,62</td></tr><tr><td><a href="municipio.html?id=5107040">Primavera Do Leste</a></td><td>51</td><td class="num">99.053</td><td class="num">R$ 829,63</td></tr><tr><td><a href="municipio.html?id=5106224">Nova Mutum</a></td><td>51</td><td class="num">65.663</td><td class="num">R$ 803,63</td></tr><tr><td><a href="municipio.html?id=5102678">Campo Verde</a></td><td>51</td><td class="num">51.969</td><td class="num">R$ 794,79</td></tr><tr><td><a href="municipio.html?id=5107958">Tangará Da Serra</a></td><td>51</td><td class="num">116.637</td><td class="num">R$ 775,45</td></tr><tr><td><a href="municipio.html?id=3548807">São Caetano Do Sul</a></td><td>35</td><td class="num">173.216</td><td class="num">R$ 773,56</td></tr></tbody>
+      </table>
+    </div>
+    <p class="rodape-tabela">Ticket médio = valor recebido por pessoa física ÷ quantidade de
+      transações recebidas, em 10/2026. Só municípios com mais de 50 mil habitantes.</p>
+  </section>
+
+  <section id="sede">
+    <h2>Municípios-sede: quando o Pix da empresa aparece no município errado</h2>
+    <p class="sub">O Pix de pessoa jurídica é recebido onde a empresa está registrada, não onde a
+      operação acontece. Por isso municípios minúsculos aparecem com volumes empresariais enormes:
+      é o caso de Santo Antônio De Lisboa (22), 5.923 habitantes e R$ 491.025 por habitante em Pix
+      de PJ. Não é economia local — é endereço fiscal.</p>
+    <div class="painel rolagem">
+      <table class="tabela">
+        <thead><tr><th>Município</th><th>UF</th><th class="num">População</th>
+          <th class="num">Pix PJ/hab</th><th class="num">Pix PF/hab</th></tr></thead>
+        <tbody><tr><td><a href="municipio.html?id=2209401">Santo Antônio De Lisboa</a></td><td>22</td><td class="num">5.923</td><td class="num">R$ 491.025</td><td class="num">R$ 3.032</td></tr><tr><td><a href="municipio.html?id=2505105">Cuité</a></td><td>25</td><td class="num">20.210</td><td class="num">R$ 119.661</td><td class="num">R$ 2.659</td></tr><tr><td><a href="municipio.html?id=2505279">Curral De Cima</a></td><td>25</td><td class="num">5.423</td><td class="num">R$ 61.401</td><td class="num">R$ 2.844</td></tr><tr><td><a href="municipio.html?id=2515500">Serra Branca</a></td><td>25</td><td class="num">14.185</td><td class="num">R$ 23.659</td><td class="num">R$ 2.438</td></tr><tr><td><a href="municipio.html?id=3143005">Monte Belo</a></td><td>31</td><td class="num">13.353</td><td class="num">R$ 98.505</td><td class="num">R$ 5.166</td></tr><tr><td><a href="municipio.html?id=4126256">Sarandi</a></td><td>41</td><td class="num">130.211</td><td class="num">R$ 94.666</td><td class="num">R$ 4.085</td></tr><tr><td><a href="municipio.html?id=4316709">Santa Bárbara Do Sul</a></td><td>43</td><td class="num">8.268</td><td class="num">R$ 111.453</td><td class="num">R$ 6.468</td></tr><tr><td><a href="municipio.html?id=4200556">Águas Frias</a></td><td>42</td><td class="num">3.036</td><td class="num">R$ 61.440</td><td class="num">R$ 10.770</td></tr><tr><td><a href="municipio.html?id=5007505">Rochedo</a></td><td>50</td><td class="num">5.494</td><td class="num">R$ 37.518</td><td class="num">R$ 4.154</td></tr><tr><td><a href="municipio.html?id=5004304">Iguatemi</a></td><td>50</td><td class="num">13.906</td><td class="num">R$ 46.987</td><td class="num">R$ 4.406</td></tr><tr><td><a href="municipio.html?id=4304952">Caseiros</a></td><td>43</td><td class="num">3.064</td><td class="num">R$ 29.513</td><td class="num">R$ 4.694</td></tr><tr><td><a href="municipio.html?id=3149606">Pequi</a></td><td>31</td><td class="num">4.271</td><td class="num">R$ 15.351</td><td class="num">R$ 3.043</td></tr></tbody>
+      </table>
+    </div>
+    <p class="rodape-tabela">Pix PJ por habitante é a métrica mais sensível a sede de empresa e a
+      arranjo de pagamento: use-a para achar concentração empresarial, não atividade econômica local.</p>
+  </section>
+
+  <section>
+    <h2>O retrato por estado</h2>
+    <p class="sub">Pix recebido por pessoa física por habitante, em 10/2026.</p>
+    <div class="painel rolagem">
+      <table class="tabela">
+        <thead><tr><th>UF</th><th class="num">Municípios</th><th class="num">População</th>
+          <th class="num">Pix PF</th><th class="num">Por habitante</th></tr></thead>
+        <tbody><tr><td>MT <span style="color:#71797f">Mato Grosso</span></td><td class="num">142</td><td class="num">3.944.347</td><td class="num">R$ 31,4 bi</td><td class="num">R$ 7.952</td></tr><tr><td>DF <span style="color:#71797f">Distrito Federal</span></td><td class="num">1</td><td class="num">3.009.996</td><td class="num">R$ 23,4 bi</td><td class="num">R$ 7.781</td></tr><tr><td>GO <span style="color:#71797f">Goiás</span></td><td class="num">246</td><td class="num">7.495.033</td><td class="num">R$ 51,5 bi</td><td class="num">R$ 6.869</td></tr><tr><td>RR <span style="color:#71797f">Roraima</span></td><td class="num">15</td><td class="num">761.012</td><td class="num">R$ 5,0 bi</td><td class="num">R$ 6.589</td></tr><tr><td>RO <span style="color:#71797f">Rondônia</span></td><td class="num">52</td><td class="num">1.757.338</td><td class="num">R$ 11,3 bi</td><td class="num">R$ 6.416</td></tr><tr><td>SP <span style="color:#71797f">São Paulo</span></td><td class="num">645</td><td class="num">46.179.008</td><td class="num">R$ 296,1 bi</td><td class="num">R$ 6.411</td></tr><tr><td>MS <span style="color:#71797f">Mato Grosso do Sul</span></td><td class="num">79</td><td class="num">2.946.317</td><td class="num">R$ 18,6 bi</td><td class="num">R$ 6.303</td></tr><tr><td>TO <span style="color:#71797f">Tocantins</span></td><td class="num">139</td><td class="num">1.595.994</td><td class="num">R$ 9,8 bi</td><td class="num">R$ 6.152</td></tr><tr><td>PR <span style="color:#71797f">Paraná</span></td><td class="num">399</td><td class="num">11.952.456</td><td class="num">R$ 66,3 bi</td><td class="num">R$ 5.549</td></tr><tr><td>ES <span style="color:#71797f">Espírito Santo</span></td><td class="num">78</td><td class="num">4.150.692</td><td class="num">R$ 22,5 bi</td><td class="num">R$ 5.428</td></tr><tr><td>AP <span style="color:#71797f">Amapá</span></td><td class="num">16</td><td class="num">809.953</td><td class="num">R$ 4,4 bi</td><td class="num">R$ 5.406</td></tr><tr><td>RJ <span style="color:#71797f">Rio de Janeiro</span></td><td class="num">92</td><td class="num">17.225.410</td><td class="num">R$ 91,3 bi</td><td class="num">R$ 5.298</td></tr><tr><td>MG <span style="color:#71797f">Minas Gerais</span></td><td class="num">853</td><td class="num">21.460.311</td><td class="num">R$ 113,3 bi</td><td class="num">R$ 5.281</td></tr><tr><td>SC <span style="color:#71797f">Santa Catarina</span></td><td class="num">295</td><td class="num">8.312.759</td><td class="num">R$ 43,1 bi</td><td class="num">R$ 5.189</td></tr><tr><td>AC <span style="color:#71797f">Acre</span></td><td class="num">22</td><td class="num">887.794</td><td class="num">R$ 4,5 bi</td><td class="num">R$ 5.027</td></tr><tr><td>SE <span style="color:#71797f">Sergipe</span></td><td class="num">75</td><td class="num">2.307.255</td><td class="num">R$ 11,1 bi</td><td class="num">R$ 4.798</td></tr><tr><td>PA <span style="color:#71797f">Pará</span></td><td class="num">144</td><td class="num">8.756.324</td><td class="num">R$ 41,4 bi</td><td class="num">R$ 4.728</td></tr><tr><td>RS <span style="color:#71797f">Rio Grande do Sul</span></td><td class="num">497</td><td class="num">11.233.317</td><td class="num">R$ 52,2 bi</td><td class="num">R$ 4.648</td></tr><tr><td>BA <span style="color:#71797f">Bahia</span></td><td class="num">417</td><td class="num">14.889.472</td><td class="num">R$ 68,7 bi</td><td class="num">R$ 4.617</td></tr><tr><td>AM <span style="color:#71797f">Amazonas</span></td><td class="num">62</td><td class="num">4.360.926</td><td class="num">R$ 19,4 bi</td><td class="num">R$ 4.459</td></tr><tr><td>PE <span style="color:#71797f">Pernambuco</span></td><td class="num">185</td><td class="num">9.583.176</td><td class="num">R$ 42,6 bi</td><td class="num">R$ 4.447</td></tr><tr><td>CE <span style="color:#71797f">Ceará</span></td><td class="num">184</td><td class="num">9.302.211</td><td class="num">R$ 40,5 bi</td><td class="num">R$ 4.356</td></tr><tr><td>AL <span style="color:#71797f">Alagoas</span></td><td class="num">102</td><td class="num">3.221.128</td><td class="num">R$ 13,9 bi</td><td class="num">R$ 4.319</td></tr><tr><td>PB <span style="color:#71797f">Paraíba</span></td><td class="num">223</td><td class="num">4.182.828</td><td class="num">R$ 18,0 bi</td><td class="num">R$ 4.312</td></tr><tr><td>MA <span style="color:#71797f">Maranhão</span></td><td class="num">217</td><td class="num">7.024.557</td><td class="num">R$ 30,0 bi</td><td class="num">R$ 4.278</td></tr><tr><td>RN <span style="color:#71797f">Rio Grande do Norte</span></td><td class="num">167</td><td class="num">3.463.737</td><td class="num">R$ 14,7 bi</td><td class="num">R$ 4.242</td></tr><tr><td>PI <span style="color:#71797f">Piauí</span></td><td class="num">224</td><td class="num">3.392.617</td><td class="num">R$ 13,0 bi</td><td class="num">R$ 3.818</td></tr></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="metodologia">
+    <h2>O que este número é e o que não é</h2>
+    <div class="grade2">
+      <div>
+        <h3>Método, em uma frase</h3>
+        <p>Regressão em log do Pix recebido por habitante contra log da população, log do PIB por
+          habitante, efeito fixo de UF e de mês, com ajuste robusto (IRLS/Huber) em 12 meses de
+          dados. O z é o resíduo mediano dividido por 1,4826 × MAD.</p>
+        <p><a href="metodologia.html">Metodologia completa, fórmulas e limites →</a></p>
+      </div>
+      <div>
+        <h3>Limites que você deve saber antes de citar</h3>
+        <ul>
+          <li>O dado é <strong>fluxo por município de origem/destino do pagador e do recebedor</strong>,
+            não renda nem PIB. Município que sedia empresa ou arranjo aparece inflado.</li>
+          <li>O PIB municipal mais recente é de 2023, então o modelo usa renda defasada.</li>
+          <li>Anomalia estatística não é irregularidade: o sinal aponta onde olhar, não o que concluir.</li>
+          <li>Municípios muito pequenos têm variância alta e entram com peso no ranking.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Dados abertos</h2>
+    <p class="sub">Tudo que está nesta página sai de fontes públicas e o código refaz o caminho do zero.</p>
+    <ul>
+      <li><a href="dados/municipios.csv">municipios.csv</a> — uma linha por município com todas as métricas</li>
+      <li><a href="dados/municipios.json">municipios.json</a> — o mesmo, com a série mensal de 12 meses</li>
+      <li><a href="dados/resumo.json">resumo.json</a> — agregados nacionais, por UF e distribuição do z</li>
+      <li>Fontes: BCB (Transações Pix por município), IBGE/SIDRA (população 2026 e PIB 2023), IBGE (malha municipal)</li>
+    </ul>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    Projeto de dados abertos · Pix por município · atualizado em 10/2026 ·
+    <a href="https://github.com/gregorizeidler/pix-raiox-municipal">código e metodologia</a>
+  </div>
+</footer>
+
+<script src="assets/app.js"></script>
+</body>
+</html>

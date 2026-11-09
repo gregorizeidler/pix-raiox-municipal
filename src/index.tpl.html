@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Raio-X do Pix municipal — onde o dinheiro passa fora da curva</title>
+<meta name="description" content="Modelo que compara o Pix recebido por habitante com o esperado para população e renda de cada um dos 5.571 municípios brasileiros. Dados abertos do BCB e do IBGE.">
+<link rel="stylesheet" href="assets/estilo.css">
+</head>
+<body>
+<header class="topo">
+  <div class="wrap">
+    <span class="selo">dados abertos · BCB + IBGE</span>
+    <h1>Raio-X do Pix municipal</h1>
+    <p>O Pix recebido por habitante, comparado com o que o tamanho e a renda de cada município
+       explicam. Sobram {{ACIMA}} municípios muito acima do esperado e {{ABAIXO}} muito abaixo —
+       e os dois lados contam histórias diferentes.</p>
+    <nav class="nav">
+      <a href="metodologia.html">Metodologia</a>
+      <a href="#mapa">Mapa</a>
+      <a href="#ranking">Ranking</a>
+      <a href="#agro">Pix do agro</a>
+      <a href="#sede">Municípios-sede</a>
+      <a href="dados/municipios.csv">Baixar dados</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section>
+    <div class="cartoes">
+      <div class="cartao">
+        <div class="rotulo">Pix recebido em {{MES}}</div>
+        <div class="valor">{{VOLUME}}</div>
+        <div class="nota">somando pessoa física e jurídica, em {{N_MUN}} municípios</div>
+      </div>
+      <div class="cartao">
+        <div class="rotulo">Concentração</div>
+        <div class="valor">{{TOP1}}</div>
+        <div class="nota">do valor ficou com os {{TOP1N}} municípios do top 1%</div>
+      </div>
+      <div class="cartao">
+        <div class="rotulo">Fora da curva</div>
+        <div class="valor">{{ACIMA}}</div>
+        <div class="nota">municípios com z ≥ 3 ({{ABAIXO}} no outro extremo)</div>
+      </div>
+      <div class="cartao">
+        <div class="rotulo">Excesso em 12 meses</div>
+        <div class="valor">{{EXCESSO}}</div>
+        <div class="nota">acima do esperado, somando só os municípios sinalizados</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="mapa">
+    <h2>O mapa da anomalia</h2>
+    <p class="sub">Cada município é pintado pelo resíduo do modelo: o quanto o Pix recebido por
+      habitante ficou acima (laranja) ou abaixo (azul) do esperado para a sua população e a sua renda.
+      Passe o dedo ou o mouse para ver o valor; clique para abrir a ficha.</p>
+    <div class="painel">
+      <div id="mapa-alvo" aria-live="polite"><p style="color:#71797f">Carregando o mapa…</p></div>
+      <div class="legenda">
+        <span><i class="z4"></i>muito acima (z ≥ 4,5)</span>
+        <span><i class="z3"></i>acima (3 a 4,5)</span>
+        <span><i class="z2"></i>levemente acima</span>
+        <span><i class="z0"></i>dentro do esperado</span>
+        <span><i class="zm2"></i>levemente abaixo</span>
+        <span><i class="zm3"></i>muito abaixo (z ≤ −3)</span>
+      </div>
+    </div>
+    <div class="busca">
+      <input id="busca" list="lista-municipios" placeholder="Buscar município (ex.: Pacaraima)" autocomplete="off">
+      <datalist id="lista-municipios"></datalist>
+      <button id="ir">Abrir ficha</button>
+    </div>
+  </section>
+
+  <section id="ranking">
+    <h2>Quem recebe muito mais Pix do que deveria</h2>
+    <p class="sub">Os 25 municípios com maior resíduo. O “esperado” vem do modelo: população, PIB
+      por habitante, UF e mês. O desvio é a diferença entre o que entrou e o que o modelo previa,
+      em média nos últimos 12 meses.</p>
+    <div class="painel rolagem">
+      <table class="tabela">
+        <thead><tr><th>#</th><th>Município</th><th>UF</th><th class="num">População</th>
+          <th class="num">Pix PF/hab</th><th class="num">Esperado</th><th class="num">Desvio</th>
+          <th class="num">z</th></tr></thead>
+        <tbody>{{LINHAS_ACIMA}}</tbody>
+      </table>
+    </div>
+    <p class="rodape-tabela">Pix PF por habitante = valor recebido por pessoa física dividido pela
+      população, média de 12 meses. A mediana nacional é {{MEDIANA}} por habitante.</p>
+  </section>
+
+  <section>
+    <h2>O caso que puxa o mapa: {{DESTAQUE}}, {{DESTAQUE_UF}}</h2>
+    <div class="grade2">
+      <div class="painel">
+        <p class="sub" style="margin-top:0">Com {{DESTAQUE_POP}} habitantes, o município recebe
+          <strong>{{DESTAQUE_PC}}</strong> por habitante em Pix de pessoa física. O modelo esperava
+          <strong>{{DESTAQUE_EXP}}</strong> — {{DESTAQUE_VEZES}} mais.</p>
+        <p class="sub">É o maior resíduo do país e não é um caso isolado de município grande:
+          a lista é dominada por cidades pequenas, muitas em faixa de fronteira, garimpo ou
+          rota de comércio internacional. O dado mostra o fluxo; a causa exige campo.</p>
+        <p><a href="municipio.html?id={{DESTAQUE_ID}}">Abrir a ficha de {{DESTAQUE}} →</a></p>
+      </div>
+      <div class="painel">
+        <h3 style="margin-top:0">Como ler o z</h3>
+        <p class="sub">O z mede quantos desvios robustos o município está acima do previsto.
+          Em uma distribuição normal, z = 3 já seria raro; aqui {{ACIMA}} municípios passam disso,
+          o que é esperado num fenômeno com cauda longa como o Pix.</p>
+        <p class="sub">z entre −1,5 e 1,5 concentra a maior parte das cidades: é ali que o modelo
+          funciona como régua, não como alerta.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>O outro lado: quem movimenta menos do que deveria</h2>
+    <p class="sub">Municípios com z ≤ −3. Aqui o padrão é outro: cidades pequenas do Norte e do
+      Nordeste, muitas em área indígena ou de difícil acesso bancário. Pix baixo por habitante não
+      é fraude — costuma ser ausência de infraestrutura financeira e de renda monetizada.</p>
+    <div class="painel rolagem">
+      <table class="tabela">
+        <thead><tr><th>#</th><th>Município</th><th>UF</th><th class="num">População</th>
+          <th class="num">Pix PF/hab</th><th class="num">Esperado</th><th class="num">Desvio</th>
+          <th class="num">z</th></tr></thead>
+        <tbody>{{LINHAS_ABAIXO}}</tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="agro">
+    <h2>O Pix do agro tem ticket de outro tamanho</h2>
+    <p class="sub">Mato Grosso lidera o Pix recebido por pessoa física por habitante
+      ({{MT_PC}}), à frente de São Paulo ({{SP_PC}}). E os maiores tickets médios do país estão
+      exatamente nos municípios de soja e algodão: pagamento de safra, arrendamento e
+      compra de insumo passam pelo Pix com valor médio acima de R$ 800.</p>
+    <div class="painel rolagem">
+      <table class="tabela">
+        <thead><tr><th>Município</th><th>UF</th><th class="num">População</th>
+          <th class="num">Ticket médio PF</th></tr></thead>
+        <tbody>{{LINHAS_TICKET}}</tbody>
+      </table>
+    </div>
+    <p class="rodape-tabela">Ticket médio = valor recebido por pessoa física ÷ quantidade de
+      transações recebidas, em {{MES}}. Só municípios com mais de 50 mil habitantes.</p>
+  </section>
+
+  <section id="sede">
+    <h2>Municípios-sede: quando o Pix da empresa aparece no município errado</h2>
+    <p class="sub">O Pix de pessoa jurídica é recebido onde a empresa está registrada, não onde a
+      operação acontece. Por isso municípios minúsculos aparecem com volumes empresariais enormes:
+      é o caso de {{SEDE}} ({{SEDE_UF}}), {{SEDE_POP}} habitantes e {{SEDE_PJ}} por habitante em Pix
+      de PJ. Não é economia local — é endereço fiscal.</p>
+    <div class="painel rolagem">
+      <table class="tabela">
+        <thead><tr><th>Município</th><th>UF</th><th class="num">População</th>
+          <th class="num">Pix PJ/hab</th><th class="num">Pix PF/hab</th></tr></thead>
+        <tbody>{{LINHAS_PJ}}</tbody>
+      </table>
+    </div>
+    <p class="rodape-tabela">Pix PJ por habitante é a métrica mais sensível a sede de empresa e a
+      arranjo de pagamento: use-a para achar concentração empresarial, não atividade econômica local.</p>
+  </section>
+
+  <section>
+    <h2>O retrato por estado</h2>
+    <p class="sub">Pix recebido por pessoa física por habitante, em {{MES}}.</p>
+    <div class="painel rolagem">
+      <table class="tabela">
+        <thead><tr><th>UF</th><th class="num">Municípios</th><th class="num">População</th>
+          <th class="num">Pix PF</th><th class="num">Por habitante</th></tr></thead>
+        <tbody>{{LINHAS_UF}}</tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="metodologia">
+    <h2>O que este número é e o que não é</h2>
+    <div class="grade2">
+      <div>
+        <h3>Método, em uma frase</h3>
+        <p>Regressão em log do Pix recebido por habitante contra log da população, log do PIB por
+          habitante, efeito fixo de UF e de mês, com ajuste robusto (IRLS/Huber) em 12 meses de
+          dados. O z é o resíduo mediano dividido por 1,4826 × MAD.</p>
+        <p><a href="metodologia.html">Metodologia completa, fórmulas e limites →</a></p>
+      </div>
+      <div>
+        <h3>Limites que você deve saber antes de citar</h3>
+        <ul>
+          <li>O dado é <strong>fluxo por município de origem/destino do pagador e do recebedor</strong>,
+            não renda nem PIB. Município que sedia empresa ou arranjo aparece inflado.</li>
+          <li>O PIB municipal mais recente é de 2023, então o modelo usa renda defasada.</li>
+          <li>Anomalia estatística não é irregularidade: o sinal aponta onde olhar, não o que concluir.</li>
+          <li>Municípios muito pequenos têm variância alta e entram com peso no ranking.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Dados abertos</h2>
+    <p class="sub">Tudo que está nesta página sai de fontes públicas e o código refaz o caminho do zero.</p>
+    <ul>
+      <li><a href="dados/municipios.csv">municipios.csv</a> — uma linha por município com todas as métricas</li>
+      <li><a href="dados/municipios.json">municipios.json</a> — o mesmo, com a série mensal de 12 meses</li>
+      <li><a href="dados/resumo.json">resumo.json</a> — agregados nacionais, por UF e distribuição do z</li>
+      <li>Fontes: BCB (Transações Pix por município), IBGE/SIDRA (população 2026 e PIB 2023), IBGE (malha municipal)</li>
+    </ul>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    Projeto de dados abertos · Pix por município · atualizado em {{MES}} ·
+    <a href="https://github.com/gregorizeidler/pix-raiox-municipal">código e metodologia</a>
+  </div>
+</footer>
+
+<script src="assets/app.js"></script>
+</body>
+</html>

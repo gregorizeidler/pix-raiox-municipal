@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ficha do município — Raio-X do Pix municipal</title>
+<meta name="description" content="Pix recebido por habitante, esperado pelo modelo, resíduo e série de 12 meses por município brasileiro.">
+<link rel="stylesheet" href="assets/estilo.css">
+</head>
+<body>
+<header class="topo">
+  <div class="wrap">
+    <span class="selo">ficha do município</span>
+    <h1 id="titulo">Carregando…</h1>
+    <p id="subtitulo">Comparação entre o Pix efetivamente recebido e o esperado para população e renda.</p>
+    <nav class="nav"><a href="index.html">← Voltar ao mapa</a><a href="metodologia.html">Metodologia</a></nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <section>
+    <div class="ficha" id="ficha"></div>
+    <div class="painel">
+      <h2 style="font-size:19px;margin-top:0">Pix recebido por pessoa física, por habitante</h2>
+      <p class="sub" style="margin-bottom:10px">Cada ponto é um mês. A linha tracejada é o esperado
+        pelo modelo para população e renda deste município.</p>
+      <div id="grafico"></div>
+      <p class="rodape-tabela" id="rodape-grafico"></p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Leitura do resultado</h2>
+    <p class="sub" id="leitura"></p>
+    <div class="aviso">Anomalia estatística não é irregularidade. O modelo aponta onde o volume
+      destoa do esperado; a causa pode ser fronteira, agro, turismo, sede de empresa, arranjo de
+      pagamento, sazonalidade ou erro de registro. Confirmar exige dado que este projeto não tem.</p>
+  </section>
+
+  <section>
+    <h2>Outras métricas deste município</h2>
+    <div class="painel rolagem">
+      <table class="tabela">
+        <thead><tr><th>Indicador</th><th class="num">Valor</th><th>O que significa</th></tr></thead>
+        <tbody id="tabela"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>Fontes</h2>
+    <ul>
+      <li><a id="link-bcb" href="https://www.bcb.gov.br/estabilidadefinanceira/estatisticaspix">BCB — Estatísticas do Pix</a>
+        (transações liquidadas por município)</li>
+      <li><a id="link-ibge" href="https://cidades.ibge.gov.br/">IBGE — Cidades</a> (população e PIB municipal)</li>
+    </ul>
+  </section>
+</main>
+
+<footer><div class="wrap">Projeto de dados abertos · Pix por município · atualizado em {{MES}} ·
+  <a href="https://github.com/gregorizeidler/pix-raiox-municipal">código</a></div></footer>
+
+<script src="assets/municipio.js"></script>
+</body>
+</html>
