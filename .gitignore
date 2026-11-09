@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+
+# artefatos grandes regenerados pelo pipeline
+data/pix_municipios.csv.gz
+data/malha_br.json
+data/modelo.json

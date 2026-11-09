@@ -1,0 +1,31 @@
+name: atualizar
+on:
+  schedule:
+    - cron: '0 9 * * *'   # 09:00 UTC = 06:00 de Brasília
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: atualizar
+
+jobs:
+  pipeline:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Pipeline completo
+        run: python3 run.py --sem-testes
+      - name: Testes
+        run: python3 -m unittest discover tests
+      - name: Commit e publish
+        run: |
+          git config user.name "pix-bot"
+          git config user.email "actions@github.com"
+          git add docs/ data/ out/ || true
+          git commit -m "build diario: dados e site do dia" || echo "nada para commitar"
+          git push
